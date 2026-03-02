@@ -102,7 +102,9 @@ class DreamZeroJointPosClient(InferenceClient):
             for k, v in request_data.items():
                 print(f"{k}: {v.shape if not isinstance(v, str) else v}")
             
-            actions = self.client.infer(request_data)
+            response = self.client.infer(request_data)
+            actions = response['actions']
+            
             assert len(actions.shape) == 2, f"Expected 2D array, got shape {actions.shape}"
             assert actions.shape[-1] == 8, f"Expected 8 action dimensions (7 joints + 1 gripper), got {actions.shape[-1]}"
             self.pred_action_chunk = actions
